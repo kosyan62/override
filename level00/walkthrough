@@ -1,0 +1,2 @@
+Just using `objdump level00` we can see instruction `cmp eax,0x149c`. That's it!
+Using it as a pass, we got a shell in which we can see next level's flag
