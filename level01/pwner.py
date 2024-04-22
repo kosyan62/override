@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-from binascii import hexlify
 from pwn import *
 
 """
