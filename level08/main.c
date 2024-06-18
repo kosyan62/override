@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
     char dest[104];
 
     cur_char = -1;
-    if ( argc != 2 ) { // Check if we have 1 arguments
+    if ( argc != 2 ) { // Check if we have 1 argument
         printf("Usage: %s filename\n", *argv);
     }
     log_file = fopen("./backups/.log", "w");
