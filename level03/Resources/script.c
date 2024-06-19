@@ -2,6 +2,7 @@
 
 int main()
 {
+    // Static string to xor from disassembly code
     char *to_xor = "Q}|u`sfg~sf{}|a3";
     char new_str[17];
     printf("Checking all xors for numbers from 0 to 21\n");
