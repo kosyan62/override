@@ -156,18 +156,11 @@ This time it reads the password to the preallocated memory on stack at the addre
     0x080484d8 <+8>:	sub    esp,0x60
     0x080484db <+11>:	lea    ebx,[esp+0x1c]
 
-Here we can see the buffer of size 0x60 being allocated, the offset in this buffer we're writing to is 0x1c so the size of the buffer to store the password is 0x60-0x1c=0x44 (68 bytes). This means that we can overflow stack and rewrite the return address which is stored on stack right before the memory we're writing to:
+Here we can see the buffer of size 0x60 being allocated, the offset in this buffer we're writing to is 0x1c so the size of the buffer to store the password is 0x60-0x1c=0x44 (68 bytes). This means that we can overflow stack and rewrite the return address which is stored on stack right before the memory we're writing to.
+The offset from the end of the buffer that we're about to overflow and the return address is 12 bytes because of the 2 registers and a pase pointer that were pushed on stack before the allocation:
 
     0x080484d0 <+0>:	push   ebp
-
-We can see the return address being popped from stack at the end of the main function:
-
-    0x080484a1 <+61>:	pop    ebp
-    0x080484a2 <+62>:	ret
-
-
-The offset from the end of the buffer that we're about to overflow and the return address is 12 bytes because of the alignment of the buffer and 2 registers that were pushed on stack before the allocation:
-
+    0x080484d1 <+1>:	mov    ebp,esp
     0x080484d3 <+3>:	push   edi
     0x080484d4 <+4>:	push   ebx
     0x080484d5 <+5>:	and    esp,0xfffffff0
