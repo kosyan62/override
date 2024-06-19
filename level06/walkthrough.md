@@ -1,4 +1,4 @@
-# Level05 walkthrough
+# Level06 walkthrough
 
 As usual first of all trying to run program, then open it in gdb.
 
