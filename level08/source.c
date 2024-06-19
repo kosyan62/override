@@ -1,9 +1,3 @@
-#include <stdlib.h>
-#include <string.h>
-#include <fcntl.h>
-#include <unistd.h>
-
-
 void log_wrapper(FILE *file, char *msg, const char *filename) {
     char dest[264];
 

@@ -1,8 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/ptrace.h>
-
 int auth(char *username, int serial)
 {
     int i;
